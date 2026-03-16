@@ -23,22 +23,66 @@ public class Sketch {
     new Item(18871, 69), 
     new Item(19967, 45)
   };                             
-  public int linearSearch(int catNumToFind){
-    //complete this method
+
+  public int linearSearch(int catNumToFind) {
+    final int n = store.length;
+    final Item[] a = store;
+    int i = 0;
+    // Unroll by 2 to cut loop overhead and improve pipeline
+    for (; i + 1 < n; i += 2) {
+      if (a[i].getCatNum() == catNumToFind) return a[i].getInventory();
+      if (a[i + 1].getCatNum() == catNumToFind) return a[i + 1].getInventory();
+    }
+    if (i < n && a[i].getCatNum() == catNumToFind) return a[i].getInventory();
     return -1;
   }
-  public int recursiveLinearSearch(int catNumToFind, int startIndex){
-    //complete this method
+
+  public int recursiveLinearSearch(int catNumToFind, int startIndex) {
+    if (startIndex >= store.length) {
+      return -1;
+    }
+    if (store[startIndex].getCatNum() == catNumToFind) {
+      return store[startIndex].getInventory();
+    }
+    return recursiveLinearSearch(catNumToFind, startIndex + 1);
+  }
+
+  public int binarySearch(int catNumToFind) {
+    int low = 0;
+    int high = store.length - 1;
+    final Item[] a = store;
+    while (low <= high) {
+      int mid = (low + high) >>> 1;
+      Item item = a[mid];
+      int catNum = item.getCatNum();
+      if (catNum == catNumToFind) {
+        return item.getInventory();
+      }
+      if (catNumToFind < catNum) {
+        high = mid - 1;
+      } else {
+        low = mid + 1;
+      }
+    }
     return -1;
   }
-  public int binarySearch(int catNumToFind){
-    //complete this method    
-    return -1;
+
+  public int recursiveBinarySearch(int catNumToFind, int nLow, int nHigh) {
+    if (nLow > nHigh) {
+      return -1;
+    }
+    int mid = (nLow + nHigh) >>> 1;
+    Item item = store[mid];
+    int catNum = item.getCatNum();
+    if (catNum == catNumToFind) {
+      return item.getInventory();
+    }
+    if (catNumToFind < catNum) {
+      return recursiveBinarySearch(catNumToFind, nLow, mid - 1);
+    }
+    return recursiveBinarySearch(catNumToFind, mid + 1, nHigh);
   }
-  public int recursiveBinarySearch(int catNumToFind, int nLow, int nHigh){
-    //complete this method    
-    return -1;
-  }
+  
   public void tester(){
     int[] tests = {0, 183, 184, 2370, 15320, 19967, 19968};
     System.out.println();
