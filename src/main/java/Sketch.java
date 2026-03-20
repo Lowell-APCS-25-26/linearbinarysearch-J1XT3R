@@ -28,7 +28,7 @@ public class Sketch {
     final int n = store.length;
     final Item[] a = store;
     int i = 0;
-    // Unroll by 2 to cut loop overhead and improve pipeline
+
     for (; i + 1 < n; i += 2) {
       if (a[i].getCatNum() == catNumToFind) return a[i].getInventory();
       if (a[i + 1].getCatNum() == catNumToFind) return a[i + 1].getInventory();
